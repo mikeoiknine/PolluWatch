@@ -1,5 +1,7 @@
 import os
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
 
 # Create and configure app
 def create_app(test_config=None):
@@ -20,5 +22,12 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    from . import data
+    app.register_blueprint(data.bp)
+
+    @app.route('/hello')
+    def hello():
+        return "Hello!"
 
     return app
