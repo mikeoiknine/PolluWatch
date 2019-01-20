@@ -1,15 +1,18 @@
-import os
 from flask import Flask
+from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from .database import db_session
+import os
 
 
 # Create and configure app
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+    cors = CORS(app)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'polluwatch@35.184.135.100/polluwatch-db1'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'dev'
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
     # load the instance of config if it exists
     if test_config is None:
@@ -25,6 +28,9 @@ def create_app(test_config=None):
 
     from . import data
     app.register_blueprint(data.bp)
+
+    from . import kevyn
+    app.register_blueprint(kevyn.bp)
 
     @app.route('/')
     def hello():
