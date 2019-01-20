@@ -1,15 +1,15 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from .database import db_session
 
 
 # Create and configure app
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping (
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'polluwatch@35.184.135.100/polluwatch-db1'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = 'dev'
 
     # load the instance of config if it exists
     if test_config is None:
@@ -26,8 +26,13 @@ def create_app(test_config=None):
     from . import data
     app.register_blueprint(data.bp)
 
-    @app.route('/hello')
+    @app.route('/')
     def hello():
-        return "Hello!"
+        return "Welcome to the server"
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db_session.remove()
 
     return app
+

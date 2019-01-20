@@ -1,22 +1,25 @@
 # import DB
 from flask import (
-    Blueprint, request
+    Blueprint, request, redirect, url_for, current_app
 )
+from .database import db_session
+from .models import Sensor
 
 bp = Blueprint('data', __name__, url_prefix='/data')
 
 @bp.route('/update', methods=['POST'])
 def update_data():
-    json_req = request.get_json()
-    # Validate json data
+    response = request.get_json()
 
-    if json_req is None:
+    # Validate json data
+    if response is None:
         return "Invalid JSON data"
 
-    # print to console for debugging
-    print(json_req)
+    sensor = Sensor(response)
 
     # Update db
+    db_session.add(sensor)
+    db_session.commit()
+    print('Record was added successfully')
 
-
-    return str(json_req) + "\n"
+    return str(response) + "\n"
