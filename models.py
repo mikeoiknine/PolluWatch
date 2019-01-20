@@ -14,8 +14,6 @@ class Sensor(Base):
     latitude        = Column(Integer)
     timestamp       = Column(Integer)
 
-    #def __init__(self, j):
-    #    self.__dict__ = json.loads(json.dumps(j))
     def __init__(self, response):
         self.temperature    = response['temperature']
         self.pressure       = response['pressure']
