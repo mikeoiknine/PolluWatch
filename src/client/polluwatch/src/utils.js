@@ -14,7 +14,7 @@ const { NODE_ENV, SERVER_PORT } = process.env;
 console.log('Serveur port:', SERVER_PORT);
 export const axios = Axios.create({
     baseURL:
-     NODE_ENV === 'development' ? `http://localhost:${SERVER_PORT || 5000}/api/v1/` : '/api/v1/'
+     NODE_ENV === 'development' ? `http://polluwatch.herokuapp.com:${SERVER_PORT || 80}/data/` : '/data/'
 });
 
 export const handleRequestError = (error, handleData) => {

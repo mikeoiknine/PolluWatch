@@ -18,30 +18,31 @@ const MapComponent = compose(
     googleMapURL:
       `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&v=3.exp&libraries=visualization,geometry,drawing,places`,
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
+    containerElement: <div style={{ height: `100%` }} />,
     mapElement: <div style={{ height: `100%` }} />
   }),
   withScriptjs,
   withGoogleMap
 )(props => {
-  const Location = LatLng();
+  console.log('Raw data', props.data)
+  const data = props.data.map(d => makeWeightedLocation(d.lat, d.lng, d.weight));
+  const mapCenter = data.length ? data[data.length - 1].location : {lat: 45, lng: -73};
+  const options = props.options;
+  console.log('Heatmap data:', data);
+  console.log('Heatmap radius:', options.radius);
   return <GoogleMap
+    ref={props.setMap}
     defaultZoom={15}
-    defaultCenter={{ lat: 37.782551, lng: -122.445368 }}
+    center={mapCenter}
+    onZoomChanged={props.onZoomChanged}
   >
     <HeatmapLayer
-      data={[
-        makeWeightedLocation(37.782551, -122.445368, 150),
-        makeWeightedLocation(37.782745, -122.444586, 10),
-        makeWeightedLocation(37.782842, -122.443688, 10),
-        makeWeightedLocation(37.782919, -122.442815, 10),
-        makeWeightedLocation(37.782992, -122.442112, 10),
-        makeWeightedLocation(37.783100, -122.441461, 10)
-      ]}
-      options={{
-        radius: 100
-      }}
+      data={data}
+      options={options}
     />
+    {React.Children.toArray(
+      props.data.map(m => <Marker position={m} onClick={() => props.onMarkerClick(m)} />))}
+    {props.children}
   </GoogleMap>
 });
 
