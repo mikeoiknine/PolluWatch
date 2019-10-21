@@ -33,4 +33,4 @@ SQLAlchemy==1.2.16
 team==1.0
 urllib3==1.24.1
 webencodings==0.5.1
-Werkzeug==0.14.1
+Werkzeug==0.15.3
