@@ -13,7 +13,7 @@ Flask-SQLAlchemy==2.3.2
 html5lib==1.0.1
 idna==2.7
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 lockfile==0.12.2
 MarkupSafe==1.1.0
 msgpack==0.5.6
